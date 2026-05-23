@@ -17,9 +17,6 @@ A Node.js/Express application that fetches live weather data from **OpenWeatherM
 
 ## Setup
 
-### Prerequisites
-
-- Node.js v18+
 - MongoDB running locally (default: `mongodb://127.0.0.1:27017`)
 
 ### Install dependencies
@@ -28,7 +25,7 @@ A Node.js/Express application that fetches live weather data from **OpenWeatherM
 npm install
 ```
 
-### Configure environment variables
+### Configure env
 
 Create a `.env` file in the project root (a sample is included):
 
