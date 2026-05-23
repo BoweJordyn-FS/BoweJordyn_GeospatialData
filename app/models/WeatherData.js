@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Schema for storing geospatial weather data retrieved from OpenWeatherMap
 const weatherDataSchema = new mongoose.Schema(
 	{
 		coordinates: {
@@ -37,7 +36,7 @@ const weatherDataSchema = new mongoose.Schema(
 			default: Date.now,
 		},
 	},
-	{ timestamps: true }
+	{ timestamps: true },
 );
 
 const WeatherData = mongoose.model('WeatherData', weatherDataSchema);

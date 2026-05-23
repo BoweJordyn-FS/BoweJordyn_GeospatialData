@@ -48,10 +48,18 @@ const getGeoData = async (req, res) => {
 		if (isNaN(parsedLat) || isNaN(parsedLon)) {
 			return res
 				.status(400)
-				.json({ success: false, message: 'lat and lon must be valid numbers.' });
+				.json({
+					success: false,
+					message: 'lat and lon must be valid numbers.',
+				});
 		}
 
-		if (parsedLat < -90 || parsedLat > 90 || parsedLon < -180 || parsedLon > 180) {
+		if (
+			parsedLat < -90 ||
+			parsedLat > 90 ||
+			parsedLon < -180 ||
+			parsedLon > 180
+		) {
 			return res.status(400).json({
 				success: false,
 				message: 'lat must be between -90 and 90; lon between -180 and 180.',
@@ -86,7 +94,10 @@ const getGeoData = async (req, res) => {
 		} catch (error) {
 			return res
 				.status(500)
-				.json({ success: false, message: `Failed to fetch weather data: ${error.message}` });
+				.json({
+					success: false,
+					message: `Failed to fetch weather data: ${error.message}`,
+				});
 		}
 	}
 
@@ -101,24 +112,45 @@ const getGeoData = async (req, res) => {
 		}
 
 		const records = await WeatherData.find(filter).sort({ fetchedAt: -1 });
-		return res.status(200).json({ success: true, count: records.length, data: records });
+		return res
+			.status(200)
+			.json({ success: true, count: records.length, data: records });
 	} catch (error) {
 		return res
 			.status(500)
-			.json({ success: false, message: `Failed to retrieve data: ${error.message}` });
+			.json({
+				success: false,
+				message: `Failed to retrieve data: ${error.message}`,
+			});
 	}
 };
 
 /**
  * POST /api/geo-data
  * Accepts geospatial weather data in the request body and saves it to MongoDB.
- * Expected body: { lat, lon, location, temperature, feelsLike, humidity, windSpeed, description, country }
+ * Expected: { lat, lon, location, temperature, feelsLike, humidity, windSpeed, description, country }
  */
 const saveGeoData = async (req, res) => {
-	const { lat, lon, location, temperature, feelsLike, humidity, windSpeed, description, country } =
-		req.body;
+	const {
+		lat,
+		lon,
+		location,
+		temperature,
+		feelsLike,
+		humidity,
+		windSpeed,
+		description,
+		country,
+	} = req.body;
 
-	if (!lat || !lon || !location || temperature == null || humidity == null || windSpeed == null) {
+	if (
+		!lat ||
+		!lon ||
+		!location ||
+		temperature == null ||
+		humidity == null ||
+		windSpeed == null
+	) {
 		return res.status(400).json({
 			success: false,
 			message:
@@ -148,13 +180,16 @@ const saveGeoData = async (req, res) => {
 	} catch (error) {
 		return res
 			.status(500)
-			.json({ success: false, message: `Failed to save data: ${error.message}` });
+			.json({
+				success: false,
+				message: `Failed to save data: ${error.message}`,
+			});
 	}
 };
 
 /**
  * GET /api/geo-data/:id
- * Retrieves a single geospatial data entry from MongoDB by its document ID.
+ * Gets a single geospatial data entry from MongoDB by its document ID.
  */
 const getGeoDataById = async (req, res) => {
 	const { id } = req.params;
@@ -172,11 +207,16 @@ const getGeoDataById = async (req, res) => {
 	} catch (error) {
 		// Mongoose throws a CastError for malformed ObjectIds
 		if (error.name === 'CastError') {
-			return res.status(400).json({ success: false, message: `Invalid id format: ${id}` });
+			return res
+				.status(400)
+				.json({ success: false, message: `Invalid id format: ${id}` });
 		}
 		return res
 			.status(500)
-			.json({ success: false, message: `Failed to retrieve record: ${error.message}` });
+			.json({
+				success: false,
+				message: `Failed to retrieve record: ${error.message}`,
+			});
 	}
 };
 
